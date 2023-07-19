@@ -1,0 +1,98 @@
+/* *{
+    border: 0.5px solid red
+} */
+body{
+    background-color:#e9ecec;
+    
+}
+h1{
+    text-align: center;
+    margin: 0;
+}
+
+.app{
+    margin: 2px;
+    background-color: white;
+}
+.pane{
+    display: flex;
+ 
+    
+}
+
+#leftPane{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 10px;
+    width: 50%;
+}
+
+ul{
+    
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+
+}
+
+li{
+    display: flex;
+    justify-content:space-between;
+    padding: 10px;
+    border-bottom: 0.5px solid grey;
+}
+
+span{
+    flex: 1;
+}
+
+li:last-child{
+    border-bottom: none;
+}
+
+.edit-btn{
+    font-size: 16px;
+    padding: 1%;
+    background-color: purple;
+    color: white;
+    border: 0.5px solid purple;
+    border-radius: 5px;
+}
+
+.delete-btn{
+    font-size: 16px;
+    margin: 0 3px; 
+    padding: 1%;
+    background-color: red;
+    color: white;
+    border: 0.5px solid red;
+    border-radius: 5px;
+}
+
+#rightPane{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 10px;
+    width: 50%;
+    border-left: 1px solid black;
+    
+}
+
+textarea{
+    flex: 1;
+    font-size: 16px;
+    padding: 1%;
+    border: none;
+    border-radius: 5px 0  0 5px;
+}
+.add-btn{
+    background-color: green;
+    color: white;
+    border: 0.5px solid green;
+    border-radius: 5px;
+    font-size: 16px;
+    padding: 1%;
+}
