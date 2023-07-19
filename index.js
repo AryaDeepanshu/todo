@@ -32,6 +32,20 @@ app.get('/todos', function(req, res){
     })
 })
 
+app.get('/delete', function(req, res){
+    let id = req.query.id
+    console.log(id)
+    deleteTodos(id, function(error){
+        if(error){
+            res.status(500)
+            res.json({ error: error })
+        }else{
+            res.status(200).send()
+        }
+
+    })
+})
+
 app.post('/todo', (req, res) => {
     const todo = req.body
     saveTodo(todo, (error) => {
@@ -53,6 +67,29 @@ function saveTodo(todo, callback){
     callback()
 }
 
+function deleteTodos(id,callback){
+    replaced = ""
+    fs.readFile("todo.todo", "utf-8", (error, data) => {
+        if(error){
+            callback(error)
+        }else{
+            try{
+                let findString = '"id":'+id+',"isDeleted":false'
+                let result = '"id":'+id+',"isDeleted":true' 
+                const replaced = data.replace(findString, result);
+                console.log(replaced)
+                fs.writeFile('todo.todo', replaced, 'utf-8', function (err) {
+                    console.log(err)
+                })
+            }catch(error){
+                callback(error, [])
+            }
+        }
+    })
+    callback(null,[])
+}
+
+
 function getTodos(name,callback){
     fs.readFile("todo.todo", "utf-8", (error, data) =>{
         console.log("inside")
@@ -66,10 +103,10 @@ function getTodos(name,callback){
                 data = data.substring(0, data.length - 1);
                 todoString = '['+ data +']'
                 let todos = JSON.parse(todoString);
-                
-                const filteredTodos = todos.filter(function(todo){
-                    return todo.createdBy === name
-                })
+                const filteredTodos = todos.filter(todo  => todo.createdBy === name && (!todo.isDeleted));
+                // const filteredTodos = todos.filter(function(todo){
+                //     return todo.createdBy === name  todo.isDeleted !="true" 
+                // })
                 console.log(filteredTodos)
                 callback(null, filteredTodos)
             }catch(error){
