@@ -1,7 +1,8 @@
 const userName = prompt("Enter your Name: ");
-
 const addTodoBtn = document.getElementById("add-btn")
 const todoTextBox = document.getElementById("addNewTodoText")
+
+getTodos()
 
 function saveTodo (todo, isMarked, callback){
     fetch('/todo', {
@@ -40,6 +41,7 @@ function addTodoToDOM(todo, isMarked){
     const todoList = document.getElementById("todoList")
     const todoItem = document.createElement("li")
     const todoData = document.createElement("span")
+    todoData.setAttribute('style', status)
     
     const todoItemChkBox = document.createElement("input")
     todoItemChkBox.setAttribute('type', 'checkbox')
@@ -63,3 +65,22 @@ function addTodoToDOM(todo, isMarked){
     todoList.appendChild(todoItem)
 }
 
+function getTodos(){
+    fetch("/todos?name=" + userName)
+    .then(function(response){
+        if(response.status != 200){
+            throw new Error("Error while fetching")
+        }
+        return response.json();
+    })
+    .then(function(todos){
+        todos.forEach(todo => {
+            addTodoToDOM(todo.text, todo.isMarked)
+        });
+        
+    })
+    .catch(function(error){
+        alert(error)
+
+    })
+}
