@@ -12,7 +12,7 @@
         
         <div class="pane">
             <div id="leftPane">
-                <ul>
+                <ul id="todoList">
                     <li>
                         <span>Todo 1</span>
                         <input type="checkbox" class="isMarked">
@@ -27,18 +27,19 @@
                     </li>
                     <li>
                         <span>Todo 3</span>
-                        <input type="checkbox" class="isMarked">
+                        <input type="checkbox" class="isMarked" id="">
                         <button class="edit-btn">&#128393;</button>
                         <button class="delete-btn">&#x2716;</button>
                     </li>
                 </ul>
             </div>
             <div id="rightPane">
-                <textarea type="text" placeholder="Add new todo"></textarea>
-                <button class="add-btn">Add</button>
+                <textarea type="text" id="addNewTodoText" placeholder="Add new todo"></textarea>
+                <button id="add-btn">Add</button>
             </div>
         </div>
        
     </div>
 </body>
+<script src="js/todo.js"></script>
 </html>
