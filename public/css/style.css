@@ -5,6 +5,7 @@ body{
     background-color:#e9ecec;
     
 }
+
 h1{
     text-align: center;
     margin: 0;
@@ -28,8 +29,7 @@ h1{
     width: 50%;
 }
 
-ul{
-    
+ul{    
     list-style: none;
     margin: 0;
     padding: 0;
@@ -92,6 +92,7 @@ textarea{
     border: none;
     border-radius: 5px 0  0 5px;
 }
+
 #add-btn{
     background-color: green;
     color: white;

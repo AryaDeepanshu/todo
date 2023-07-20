@@ -1,9 +1,46 @@
 const userName = prompt("Enter your Name: ");
 const addTodoBtn = document.getElementById("add-btn")
 const todoTextBox = document.getElementById("addNewTodoText")
-
+let editId =''
 
 getTodos()
+
+addTodoBtn.addEventListener("click", () => {
+    let todoInputText = todoTextBox.value
+    if(todoInputText){
+        if(addTodoBtn.textContent != "save"){
+            saveTodo(todoInputText, false, (error, id) => {
+                if(error){
+                    alert("Error: " + error)
+                }else{
+                    todoTextBox.value = ""
+                    addTodoToDOM(todoInputText, false, id, false)
+                }
+            })
+        }else{
+            updateTodo(todoInputText,editId, userName)
+        }
+    }else{
+        alert("Todo text is empty")
+    }
+})
+
+function btnClk(id){
+    if(id.slice(-1) === "d"){
+        id = id.substring(0, id.length - 1)
+        todoDelete(id)
+    }
+
+    if(id.slice(-1) === "c"){
+        id = id.substring(0, id.length - 1)
+        todoDone(id)
+    }
+
+    if(id.slice(-1) === "e"){
+        id = id.substring(0, id.length - 1)
+        todoEdit(id)
+    }
+}
 
 function saveTodo (todo, isMarked, callback){
     let d = new Date().getTime()
@@ -17,95 +54,6 @@ function saveTodo (todo, isMarked, callback){
         }else{
             callback("Something went wrong","")
         }
-    })
-}
-
-addTodoBtn.addEventListener("click", () => {
-    let todoInputText = todoTextBox.value
-    if(todoInputText){
-        saveTodo(todoInputText, false, (error, id) => {
-            if(error){
-                alert("Error: " + error)
-            }else{
-                todoTextBox.value = ""
-                addTodoToDOM(todoInputText, false, id, false)
-            }
-        })
-    }else{
-        alert("Todo text is empty")
-    }
-})
-
-
-function addTodoToDOM(todo, isMarked, id, isDeleted){
-    if(!todo){
-        return
-    }
-    let status = isMarked? "text-decoration: line-through":""
-    const todoList = document.getElementById("todoList")
-    const todoItem = document.createElement("li")
-    const todoData = document.createElement("span")
-    todoData.setAttribute('style', status)
-    todoData.setAttribute('id', id+"t")   
-
-    const todoItemChkBox = document.createElement("input")
-    todoItemChkBox.setAttribute('type', 'checkbox')
-    todoItemChkBox.setAttribute('ismarked', status)
-    todoItemChkBox.setAttribute('id', id+"c") 
-    todoItemChkBox.setAttribute('onClick', "btnClk(this.id)")
-    todoItemChkBox.checked = status
-    
-    const todoItemEdtBtn = document.createElement("button")
-    todoItemEdtBtn.setAttribute('class', 'edit-btn')
-    todoItemEdtBtn.setAttribute('id', id+"e")
-    todoItemEdtBtn.setAttribute('onClick', "btnClk(this.id)") 
-    todoItemEdtBtn.innerHTML = "&#128393";
-
-    const todoItemDltBtn = document.createElement("buttom")
-    todoItemDltBtn.setAttribute('class', 'delete-btn')
-    todoItemDltBtn.setAttribute('id', id+"d") 
-    todoItemDltBtn.setAttribute('onClick', "btnClk(this.id)") 
-    todoItemDltBtn.innerHTML = "&#x2716";
-
-    todoData.innerText = todo
-    todoItem.appendChild(todoData)
-    todoItem.appendChild(todoItemChkBox)
-    todoItem.appendChild(todoItemEdtBtn)
-    todoItem.appendChild(todoItemDltBtn)
-
-    todoList.appendChild(todoItem)
-}
-
-
-function btnClk(id){
-    if(id.slice(-1) === "d"){
-        id = id.substring(0, id.length - 1)
-        todoDelete(id)
-    }
-
-    if(id.slice(-1) === "c"){
-        id = id.substring(0, id.length - 1)
-        todoDone(id)
-    }
-}
-
-function todoDone(id){
-    fetch("/done?id=" + id)
-    .then(function(response){
-        if(response.status != 200){
-            throw new Error("Error while fetching")
-        }
-        return;
-    })
-    .then(function(){
-        const todoList = document.getElementById("todoList")
-        todoList.innerHTML=""
-        getTodos()
-
-    })
-    .catch(function(error){
-        alert(error)
-
     })
 }
 
@@ -129,6 +77,52 @@ function todoDelete(id){
     })
 }
 
+function updateTodo(text, id, userName){
+    fetch("/update?id=" + id + "&text=" + text + "&name=" + userName)
+    .then(function(response){
+        if(response.status != 200){
+            throw new Error("Error while fetching")
+        }
+        return;
+    }).then(function(){
+        const todoList = document.getElementById("todoList")
+        todoList.innerHTML=""
+        getTodos()
+        addTodoBtn.textContent = "Add"
+        todoTextBox.value = ""
+    })
+    .catch(function(error){
+        alert(error)
+    })
+}
+
+function todoDone(id){
+    fetch("/done?id=" + id)
+    .then(function(response){
+        if(response.status != 200){
+            throw new Error("Error while fetching")
+        }
+        return;
+    })
+    .then(function(){
+        const todoList = document.getElementById("todoList")
+        todoList.innerHTML=""
+        getTodos()
+
+    })
+    .catch(function(error){
+        alert(error)
+
+    })
+}
+
+function todoEdit(id){
+    editId = id
+    addTodoBtn.textContent = "save"
+    let todoData = document.getElementById(id+"t")
+    todoTextBox.value = todoData.innerText
+}
+
 function getTodos(){
     fetch("/todos?name=" + userName)
     .then(function(response){
@@ -147,4 +141,18 @@ function getTodos(){
         alert(error)
 
     })
+}
+
+function addTodoToDOM(todo, isMarked, id, isDeleted){
+    if(!todo){
+        return
+    }
+    let status = isMarked? "text-decoration: line-through":""
+    let component =
+    `<li><span style="${status}" id="${id}t">${todo}</span>
+    <input type="checkbox" ismarked="${status}" id="${id}c" onclick="btnClk(this.id)">
+    <button class="edit-btn" id="${id}e" onclick="btnClk(this.id)">🖉</button>
+    <buttom class="delete-btn" id="${id}d" onclick="btnClk(this.id)">✖</buttom></li>`
+    
+    todoList.innerHTML += component
 }

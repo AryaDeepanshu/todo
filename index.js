@@ -40,7 +40,6 @@ app.get('/delete', function(req, res){
         }else{
             res.status(200).send()
         }
-
     })
 })
 
@@ -53,9 +52,23 @@ app.get('/done', function(req, res){
         }else{
             res.status(200).send()
         }
-
     })
 })
+
+app.get('/update', function(req, res){
+    let id = req.query.id
+    let text = req.query.text
+    let name = req.query.name
+    todoUpdate(id, text, name, function(error){
+        if(error){
+            res.status(500)
+            res.json({ error: error })
+        }else{
+            res.status(200).send()
+        }
+    })
+})
+
 
 app.post('/todo', (req, res) => {
     const todo = req.body
@@ -69,40 +82,6 @@ app.post('/todo', (req, res) => {
     })
 })
 
-function saveTodo(todo, callback){
-   let stream = fs.createWriteStream("todo.todo", {flags: 'a'})
-   stream.write(JSON.stringify(todo) + ",")
-   stream.end()
-    callback()
-}
-
-function todoDone(id, callback){
-    replaced = ""
-    fs.readFile("todo.todo", "utf-8", (error, data) => {
-        if(error){
-            callback(error)
-        }else{
-            try{
-                let findString =""
-                let result = ""
-                if(data.includes('"isMarked":false,"id":'+id)){
-                     findString = '"isMarked":false,"id":'+id
-                     result =  '"isMarked":true,"id":'+id
-                }else{
-                     findString = '"isMarked":true,"id":'+id
-                     result = '"isMarked":false,"id":'+id
-                } 
-                const replaced = data.replace(findString, result);
-                fs.writeFile('todo.todo', replaced, 'utf-8', function (err) {
-                    console.log(err)
-                })
-            }catch(error){
-                callback(error, [])
-            }
-        }
-    })
-    callback(null,[])
-}
 function deleteTodos(id,callback){
     replaced = ""
     fs.readFile("todo.todo", "utf-8", (error, data) => {
@@ -125,6 +104,70 @@ function deleteTodos(id,callback){
     callback(null,[])
 }
 
+function todoDone(id, callback){
+    replaced = ""
+    fs.readFile("todo.todo", "utf-8", (error, data) => {
+        if(error){
+            callback(error)
+        }else{
+            try{
+                let findString =""
+                let result = ""
+                if(data.includes('"isMarked":false,"id":'+id)){
+                     findString = '"isMarked":false,"id":'+id
+                     result =  '"isMarked":true,"id":'+id
+                }else{
+                     findString = '"isMarked":true,"id":'+id
+                     result = '"isMarked":false,"id":'+id
+                } 
+                const replaced = data.replace(findString, result);
+
+                fs.writeFile('todo.todo', replaced, 'utf-8', function (err) {
+                    console.log(err)
+                })
+            }catch(error){
+                callback(error, [])
+            }
+        }
+    })
+    callback(null,[])
+}
+
+function todoUpdate(id, text, name, callback){
+    let replaced = ""
+    fs.readFile("todo.todo", "utf-8", (error, data) => { 
+        if(error){
+            callback(error)
+        }else{
+            try{
+                let regex = new RegExp(`{"text":"[^"]+","createdBy":"${name}","isMarked":(true|false),"id":${id}`, "g")
+                let matches = data.match(regex)
+                if(matches.length === 0){
+                    console.log('No matches found');
+                }else {
+                    let result = matches[0].replace(/{"text":"[^"]+","/g, '{"text":"'+text+'","')
+                    
+                    replaced = data.replace(matches[0], result);
+                    console.log(replaced)
+                    fs.writeFile('todo.todo', replaced, 'utf-8', function (err) {
+                        console.log(err)
+                    })
+                
+                }
+            }catch(error){
+                callback(error, [])
+            }
+        }
+    })
+    callback(null, [])
+}
+
+function saveTodo(todo, callback){
+    let stream = fs.createWriteStream("todo.todo", {flags: 'a'})
+    stream.write(JSON.stringify(todo) + ",")
+    stream.end()
+    callback()
+}
 
 function getTodos(name,callback){
     fs.readFile("todo.todo", "utf-8", (error, data) =>{
