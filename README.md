@@ -1,0 +1,1 @@
+[![Build and deploy Node.js app to Azure Web App - taskly](https://github.com/AryaDeepanshu/todo/actions/workflows/master_taskly.yml/badge.svg)](https://github.com/AryaDeepanshu/todo/actions/workflows/master_taskly.yml)
