@@ -148,7 +148,6 @@ function todoUpdate(id, text, name, callback){
                     let result = matches[0].replace(/{"text":"[^"]+","/g, '{"text":"'+text+'","')
                     
                     replaced = data.replace(matches[0], result);
-                    console.log(replaced)
                     fs.writeFile('todo.todo', replaced, 'utf-8', function (err) {
                         console.log(err)
                     })

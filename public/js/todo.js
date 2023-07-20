@@ -14,7 +14,8 @@ addTodoBtn.addEventListener("click", () => {
                     alert("Error: " + error)
                 }else{
                     todoTextBox.value = ""
-                    addTodoToDOM(todoInputText, false, id, false)
+                    todos = [{text: todoInputText, createdBy : userName, isMarked: false, id: id, isDeleted: false}]
+                    addTodoToDOM(todos)
                 }
             })
         }else{
@@ -132,10 +133,10 @@ function getTodos(){
         return response.json();
     })
     .then(function(todos){
-        todos.forEach(todo => {
-            addTodoToDOM(todo.text, todo.isMarked, todo.id, todo.isDeleted)
-        });
-        
+        // todos.forEach(todo => {
+        //     addTodoToDOM(todo.text, todo.isMarked, todo.id, todo.isDeleted)
+        // });
+        addTodoToDOM(todos)
     })
     .catch(function(error){
         alert(error)
@@ -143,16 +144,23 @@ function getTodos(){
     })
 }
 
-function addTodoToDOM(todo, isMarked, id, isDeleted){
-    if(!todo){
+function addTodoToDOM(todos){
+    if(!todos){
         return
     }
-    let status = isMarked? "text-decoration: line-through":""
-    let component =
-    `<li><span style="${status}" id="${id}t">${todo}</span>
-    <input type="checkbox" ismarked="${status}" id="${id}c" onclick="btnClk(this.id)">
-    <button class="edit-btn" id="${id}e" onclick="btnClk(this.id)">🖉</button>
-    <buttom class="delete-btn" id="${id}d" onclick="btnClk(this.id)">✖</buttom></li>`
+    todos.forEach(todo => {
+        todoid = todo.id,
+        todotext = todo.text, 
+        isMarked = todo.isMarked
+        isDeleted  = todo.isDeleted
+        let status = (todo.isMarked)? "text-decoration: line-through":""
+        let component =
+        `<li><span style="${status}" id="${todoid}t">${todotext}</span>
+        <input type="checkbox" ismarked="${status}" id="${todoid}c" onclick="btnClk(this.id)" ${isMarked?"checked":""}>
+        <button class="edit-btn" id="${todoid}e" onclick="btnClk(this.id)">🖉</button>
+        <buttom class="delete-btn" id="${todoid}d" onclick="btnClk(this.id)">✖</buttom></li>`
+        
+        todoList.innerHTML += component
+    });
     
-    todoList.innerHTML += component
 }
