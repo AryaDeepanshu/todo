@@ -21,10 +21,10 @@ jobs:
         with:
           node-version: '18.x'
 
-      - name: npm install
-        run: npm install
-      - name: npm run 
-        run: node index.js
+      - name: npm install, build, and test
+        run: |
+          npm install
+          npm run test 
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
