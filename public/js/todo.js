@@ -3,7 +3,6 @@ const addTodoBtn = document.getElementById("add-btn")
 const todoTextBox = document.getElementById("addNewTodoText")
 
 
-
 getTodos()
 
 function saveTodo (todo, isMarked, callback){
@@ -28,6 +27,7 @@ addTodoBtn.addEventListener("click", () => {
             if(error){
                 alert("Error: " + error)
             }else{
+                todoTextBox.value = ""
                 addTodoToDOM(todoInputText, false, id, false)
             }
         })
@@ -52,6 +52,7 @@ function addTodoToDOM(todo, isMarked, id, isDeleted){
     todoItemChkBox.setAttribute('type', 'checkbox')
     todoItemChkBox.setAttribute('ismarked', status)
     todoItemChkBox.setAttribute('id', id+"c") 
+    todoItemChkBox.setAttribute('onClick', "btnClk(this.id)")
     todoItemChkBox.checked = status
     
     const todoItemEdtBtn = document.createElement("button")
@@ -80,8 +81,32 @@ function btnClk(id){
     if(id.slice(-1) === "d"){
         id = id.substring(0, id.length - 1)
         todoDelete(id)
-    
     }
+
+    if(id.slice(-1) === "c"){
+        id = id.substring(0, id.length - 1)
+        todoDone(id)
+    }
+}
+
+function todoDone(id){
+    fetch("/done?id=" + id)
+    .then(function(response){
+        if(response.status != 200){
+            throw new Error("Error while fetching")
+        }
+        return;
+    })
+    .then(function(){
+        const todoList = document.getElementById("todoList")
+        todoList.innerHTML=""
+        getTodos()
+
+    })
+    .catch(function(error){
+        alert(error)
+
+    })
 }
 
 function todoDelete(id){

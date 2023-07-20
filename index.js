@@ -20,7 +20,6 @@ app.get('/js/todo.js', (req, res) => {
 
 app.get('/todos', function(req, res){
     let name = req.query.name
-    console.log(name)
     getTodos(name, function(error, todos){
         if(error){
             res.status(500)
@@ -34,8 +33,20 @@ app.get('/todos', function(req, res){
 
 app.get('/delete', function(req, res){
     let id = req.query.id
-    console.log(id)
     deleteTodos(id, function(error){
+        if(error){
+            res.status(500)
+            res.json({ error: error })
+        }else{
+            res.status(200).send()
+        }
+
+    })
+})
+
+app.get('/done', function(req, res){
+    let id = req.query.id
+    todoDone(id, function(error){
         if(error){
             res.status(500)
             res.json({ error: error })
@@ -50,9 +61,7 @@ app.post('/todo', (req, res) => {
     const todo = req.body
     saveTodo(todo, (error) => {
         if(error){
-            console.log(error)
             res.status(500)
-            
             res.json({error: error}).send()
         }else{
             res.status(200).send()
@@ -67,6 +76,33 @@ function saveTodo(todo, callback){
     callback()
 }
 
+function todoDone(id, callback){
+    replaced = ""
+    fs.readFile("todo.todo", "utf-8", (error, data) => {
+        if(error){
+            callback(error)
+        }else{
+            try{
+                let findString =""
+                let result = ""
+                if(data.includes('"isMarked":false,"id":'+id)){
+                     findString = '"isMarked":false,"id":'+id
+                     result =  '"isMarked":true,"id":'+id
+                }else{
+                     findString = '"isMarked":true,"id":'+id
+                     result = '"isMarked":false,"id":'+id
+                } 
+                const replaced = data.replace(findString, result);
+                fs.writeFile('todo.todo', replaced, 'utf-8', function (err) {
+                    console.log(err)
+                })
+            }catch(error){
+                callback(error, [])
+            }
+        }
+    })
+    callback(null,[])
+}
 function deleteTodos(id,callback){
     replaced = ""
     fs.readFile("todo.todo", "utf-8", (error, data) => {
@@ -77,7 +113,7 @@ function deleteTodos(id,callback){
                 let findString = '"id":'+id+',"isDeleted":false'
                 let result = '"id":'+id+',"isDeleted":true' 
                 const replaced = data.replace(findString, result);
-                console.log(replaced)
+
                 fs.writeFile('todo.todo', replaced, 'utf-8', function (err) {
                     console.log(err)
                 })
@@ -92,7 +128,6 @@ function deleteTodos(id,callback){
 
 function getTodos(name,callback){
     fs.readFile("todo.todo", "utf-8", (error, data) =>{
-        console.log("inside")
         if(error){
             callback(error)
         }else{
@@ -107,7 +142,6 @@ function getTodos(name,callback){
                 // const filteredTodos = todos.filter(function(todo){
                 //     return todo.createdBy === name  todo.isDeleted !="true" 
                 // })
-                console.log(filteredTodos)
                 callback(null, filteredTodos)
             }catch(error){
                 callback(null, [])
