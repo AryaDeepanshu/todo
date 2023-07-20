@@ -4,7 +4,7 @@
   "description": "A todo app",
   "main": "index.js",
   "scripts": {
-    "start": "npx nodemon index.js && exit 1", 
+    "start": "npx nodemon index.js", 
     "test": "echo \"no test specified\" "
   },
   "author": "Deepanshu Arya",

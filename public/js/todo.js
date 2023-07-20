@@ -67,9 +67,9 @@ function todoDelete(id){
         return;
     })
     .then(function(){
-        const todoList = document.getElementById("todoList")
-        todoList.innerHTML=""
-        getTodos()
+        let text = document.getElementById(id+"t")
+        let parent = text.parentNode
+        parent.remove();
 
     })
     .catch(function(error){
@@ -86,11 +86,11 @@ function updateTodo(text, id, userName){
         }
         return;
     }).then(function(){
-        const todoList = document.getElementById("todoList")
-        todoList.innerHTML=""
-        getTodos()
+        let text = document.getElementById(id+"t")
         addTodoBtn.textContent = "Add"
-        todoTextBox.value = ""
+        text.innerText = todoTextBox.value
+        todoTextBox.value =""
+        
     })
     .catch(function(error){
         alert(error)
@@ -106,10 +106,12 @@ function todoDone(id){
         return;
     })
     .then(function(){
-        const todoList = document.getElementById("todoList")
-        todoList.innerHTML=""
-        getTodos()
-
+        let text = document.getElementById(id+"t")
+        if(text.style.textDecoration === "line-through"){
+            text.style.textDecoration = ""
+        }else{
+            text.style.textDecoration = "line-through"
+        }
     })
     .catch(function(error){
         alert(error)
