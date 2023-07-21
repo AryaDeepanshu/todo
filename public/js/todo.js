@@ -5,6 +5,14 @@ let editId =''
 
 getTodos()
 
+todoTextBox.addEventListener('keydown', function (e) {
+
+    if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        addTodoBtn.click();
+    }
+});
+
 addTodoBtn.addEventListener("click", () => {
     let todoInputText = todoTextBox.value
     if(todoInputText){
