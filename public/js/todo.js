@@ -158,7 +158,7 @@ function addTodoToDOM(todos){
         let status = (todo.isMarked)? "text-decoration: line-through":""
         let component =
         `<li><span style="${status}" id="${todoid}t">${todotext}</span>
-        <input type="checkbox" ismarked="${status}" id="${todoid}c" onclick="btnClk(this.id)" ${isMarked?"checked":""}>
+        <input class="done-btn" type="checkbox" ismarked="${status}" id="${todoid}c" onclick="btnClk(this.id)" ${isMarked?"checked":""}>
         <button class="edit-btn" id="${todoid}e" onclick="btnClk(this.id)">🖉</button>
         <buttom class="delete-btn" id="${todoid}d" onclick="btnClk(this.id)">✖</buttom></li>`
         

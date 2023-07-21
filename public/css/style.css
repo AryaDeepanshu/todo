@@ -1,32 +1,48 @@
-/* *{
-    border: 0.5px solid red
-} */
-body{
-    background-color:#e9ecec;
-    
+*{
+    /* border: 0.5px solid red */
+    margin: 0;
+    padding: 0;
 }
 
-h1{
-    text-align: center;
-    margin: 0;
+::-webkit-scrollbar {
+    display: none;
+}
+
+body{
+    background-color:#e9ecec;
+}
+
+h1 {
+    margin: 0px 0px 30px 0px;
+    font-size: 50px;
 }
 
 .app{
-    margin: 2px;
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
     background-color: white;
+    height: 96vh;
+    border-radius: 1em;
+    margin: 19px;
+    align-items: center;
 }
 .pane{
     display: flex;
- 
-    
+    flex-direction: row;
+    height: 50vh;
+    width: 70vw;
 }
 
 #leftPane{
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: space-around;
     padding: 10px;
     width: 50%;
+    background-color: rgb(210, 209, 209);
+    border-radius: 0.7em;
+    overflow: scroll;
 }
 
 ul{    
@@ -39,8 +55,9 @@ ul{
 
 li{
     display: flex;
+    align-items: center;
     justify-content:space-between;
-    padding: 10px;
+    padding: 15px 0px 15px 5px;
     border-bottom: 0.5px solid grey;
     width: 100%;
     
@@ -56,28 +73,31 @@ li:last-child{
     border-bottom: none;
 }
 
-.edit-btn{
-    font-size: 16px;
-    padding: 1%;
-    background-color: purple;
-    color: white;
-    border: 0.5px solid purple;
-    border-radius: 5px;
+.done-btn{
+    cursor: pointer;
+    height: 23px;
+    width: 23px;
+    margin: 5px 6px 0px 0px;
 }
-
-.delete-btn{
-    font-size: 16px;
-    margin: 0 3px; 
-    padding: 1%;
-    background-color: red;
-    color: white;
-    border: 0.5px solid red;
+.edit-btn {
+    font-size: 23px;
+    background-color: #afaaaf00;
+    color: black;
+    border: 0.5px solid #80008000;
     border-radius: 5px;
+    cursor: pointer;
+}
+.delete-btn {
+    font-size: 25px;
+    margin: 0 3px;
+    padding: 1%;
+    color: black;
+    cursor: pointer;
 }
 
 #rightPane{
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: space-around;
     padding: 10px;
     width: 50%;
@@ -87,10 +107,15 @@ li:last-child{
 
 textarea{
     flex: 1;
-    font-size: 16px;
+    font-size: 30px;
     padding: 1%;
     border: none;
     border-radius: 5px 0  0 5px;
+    resize: none;
+}
+
+textarea:focus,input:focus {
+    outline: none;
 }
 
 #add-btn{
@@ -98,6 +123,6 @@ textarea{
     color: white;
     border: 0.5px solid green;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 30px;
     padding: 1%;
 }
