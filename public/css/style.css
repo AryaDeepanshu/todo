@@ -34,16 +34,17 @@ h1 {
     width: 70vw;
 }
 
-#leftPane{
+#leftPane {
     display: flex;
-    align-items: start;
-    justify-content: space-around;
+    align-items: flex-start;
+    justify-content: flex-start;
     padding: 10px;
     width: 50%;
     background-color: rgb(210, 209, 209);
     border-radius: 0.7em;
     overflow: scroll;
     margin: 0px 15px 0px 11px;
+    flex-direction: column;
 }
 
 ul{    
