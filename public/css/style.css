@@ -43,6 +43,7 @@ h1 {
     background-color: rgb(210, 209, 209);
     border-radius: 0.7em;
     overflow: scroll;
+    margin: 0px 15px 0px 11px;
 }
 
 ul{    
@@ -60,7 +61,6 @@ li{
     padding: 15px 0px 15px 5px;
     border-bottom: 0.5px solid grey;
     width: 100%;
-    
 }
 
 span{
