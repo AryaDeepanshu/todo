@@ -67,6 +67,9 @@ function saveTodo (todo, isMarked, callback){
 }
 
 function todoDelete(id){
+    let text = document.getElementById(id+"t")
+    let parent = text.parentNode
+    parent.remove();
     fetch("/delete?id=" + id)
     .then(function(response){
         if(response.status !=200){
@@ -75,10 +78,7 @@ function todoDelete(id){
         return;
     })
     .then(function(){
-        let text = document.getElementById(id+"t")
-        let parent = text.parentNode
-        parent.remove();
-
+       return
     })
     .catch(function(error){
         alert(error)

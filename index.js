@@ -36,7 +36,7 @@ app.get('/delete', function(req, res){
     deleteTodos(id, function(error){
         if(error){
             res.status(500)
-            res.json({ error: error })
+            res.json({error: error})
         }else{
             res.status(200).send()
         }
@@ -89,19 +89,31 @@ function deleteTodos(id,callback){
             callback(error)
         }else{
             try{
-                let findString = '"id":'+id+',"isDeleted":false'
-                let result = '"id":'+id+',"isDeleted":true' 
-                const replaced = data.replace(findString, result);
+                // let findString = '"id":'+id+',"isDeleted":false'
+                // let result = '"id":'+id+',"isDeleted":true' 
+                // const replaced = data.replace(findString, result);
 
-                fs.writeFile('todo.todo', replaced, 'utf-8', function (err) {
-                    console.log(err)
-                })
+                // fs.writeFile('todo.todo', replaced, 'utf-8', function (err) {
+                //     console.log(err)
+                // })
+                let regex = new RegExp(`{"text":"[^"]+","createdBy":"[^"]+","isMarked":(true|false),"id":${id},"isDeleted":false},`, "g")
+                let matches = data.match(regex)
+                if(matches.length === 0){
+                    console.log('No matches found');
+                }else {
+                    let result = ""
+                    
+                    replaced = data.replace(matches[0], result);
+                    fs.writeFile('todo.todo', replaced, 'utf-8', function (err) {
+                        console.log(err)
+                    })
+                }
             }catch(error){
-                callback(error, [])
+                callback(error)
             }
         }
     })
-    callback(null,[])
+    callback(null)
 }
 
 function todoDone(id, callback){
@@ -177,10 +189,11 @@ function getTodos(name,callback){
                 data = ""
             }
             try{
-                data = data.substring(0, data.length - 1);
+                if(data[data.length - 1] === ",")
+                    data = data.substring(0, data.length - 1);
                 todoString = '['+ data +']'
                 let todos = JSON.parse(todoString);
-                const filteredTodos = todos.filter(todo  => todo.createdBy === name && (!todo.isDeleted));
+                const filteredTodos = todos.filter(todo  => todo.createdBy === name );
                 // const filteredTodos = todos.filter(function(todo){
                 //     return todo.createdBy === name  todo.isDeleted !="true" 
                 // })
