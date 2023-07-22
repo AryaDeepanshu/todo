@@ -174,8 +174,7 @@ function addTodoToDOM(todos){
         <input class="done-btn" type="checkbox" ismarked="${status}" id="${todoid}c" onclick="btnClk(this.id)" ${isMarked?"checked":""}>
         <button class="edit-btn" id="${todoid}e" onclick="btnClk(this.id)">🖉</button>
         <buttom class="delete-btn" id="${todoid}d" onclick="btnClk(this.id)">✖</buttom></li>`
-        
-        todoList.innerHTML += component
+       todoList.insertAdjacentHTML('beforeend', component) 
     });
     
 }

@@ -2,5 +2,7 @@
     "appService.zipIgnorePattern": [
         "node_modules{,/**}",
         ".vscode{,/**}"
-    ]
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/cd0d680b-106a-411a-88c7-2b621629518b/resourceGroups/todoResouce/providers/Microsoft.Web/sites/taskly",
+    "appService.deploySubpath": "."
 }
