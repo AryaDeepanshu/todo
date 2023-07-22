@@ -67,6 +67,11 @@ function saveTodo (todo, isMarked, callback){
 }
 
 function todoDelete(id){
+    if(addTodoBtn.textContent != "Add"){
+        alert("Please save the todo before deleting")
+        return
+    }
+        
     let text = document.getElementById(id+"t")
     let parent = text.parentNode
     parent.remove();
