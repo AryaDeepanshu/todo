@@ -136,3 +136,38 @@ textarea:focus,input:focus {
     background-color: rgb(210, 209, 209);
     height: 65px
 }
+
+@media only screen and (max-width: 1000px) {
+    .pane{
+        flex-direction: column; 
+    }
+
+    #leftPane{
+        width: 100%;
+        margin: 0px;
+        border-radius: 0.7em;
+    }
+    #rightPane{
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid black;
+    }
+    #todoHeading{
+        position: relative;
+        margin: 0px;
+    }
+    .app{
+        margin: 0px;
+        border-radius: 0;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    li{
+        flex-direction: column;
+        padding: 15px 5px 15px 5px;
+    }
+    span{
+        text-align: center;
+    }  
+}
