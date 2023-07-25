@@ -3,7 +3,9 @@ const addTodoBtn = document.getElementById("add-btn")
 const todoTextBox = document.getElementById("addNewTodoText")
 let editId =''
 
+
 getTodos()
+
 
 todoTextBox.addEventListener('keydown', function (e) {
 
@@ -51,93 +53,6 @@ function btnClk(id){
     }
 }
 
-function saveTodo (todo, isMarked, callback){
-    let d = new Date().getTime()
-    fetch('/todo', {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({text: todo, createdBy : userName, isMarked: isMarked, id: d, isDeleted: false})
-      }).then(function (response) {
-        if(response){
-            callback("", d)
-        }else{
-            callback("Something went wrong","")
-        }
-    })
-}
-
-function todoDelete(id){
-    if(addTodoBtn.textContent != "Add"){
-        alert("Please save the todo before deleting")
-        return
-    }
-        
-    let text = document.getElementById(id+"t")
-    let parent = text.parentNode
-    parent.remove();
-    fetch("/delete?id=" + id)
-    .then(function(response){
-        if(response.status !=200){
-            throw new Error("Error while fetching")
-        }
-        return;
-    })
-    .then(function(){
-       return
-    })
-    .catch(function(error){
-        alert(error)
-
-    })
-}
-
-function updateTodo(text, id, userName){
-    fetch("/update?id=" + id + "&text=" + text + "&name=" + userName)
-    .then(function(response){
-        if(response.status != 200){
-            throw new Error("Error while fetching")
-        }
-        return;
-    }).then(function(){
-        let text = document.getElementById(id+"t")
-        addTodoBtn.textContent = "Add"
-        text.innerText = todoTextBox.value
-        todoTextBox.value =""
-        
-    })
-    .catch(function(error){
-        alert(error)
-    })
-}
-
-function todoDone(id){
-    fetch("/done?id=" + id)
-    .then(function(response){
-        if(response.status != 200){
-            throw new Error("Error while fetching")
-        }
-        return;
-    })
-    .then(function(){
-        let text = document.getElementById(id+"t")
-        if(text.style.textDecoration === "line-through"){
-            text.style.textDecoration = ""
-        }else{
-            text.style.textDecoration = "line-through"
-        }
-    })
-    .catch(function(error){
-        alert(error)
-
-    })
-}
-
-function todoEdit(id){
-    editId = id
-    addTodoBtn.textContent = "save"
-    let todoData = document.getElementById(id+"t")
-    todoTextBox.value = todoData.innerText
-}
 
 function getTodos(){
     fetch("/todos?name=" + userName)
@@ -148,9 +63,6 @@ function getTodos(){
         return response.json();
     })
     .then(function(todos){
-        // todos.forEach(todo => {
-        //     addTodoToDOM(todo.text, todo.isMarked, todo.id, todo.isDeleted)
-        // });
         addTodoToDOM(todos)
     })
     .catch(function(error){
@@ -177,4 +89,96 @@ function addTodoToDOM(todos){
        todoList.insertAdjacentHTML('beforeend', component) 
     });
     
+}
+
+
+function saveTodo (todo, isMarked, callback){
+    let d = new Date().getTime()
+    fetch('/todo', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({text: todo, createdBy : userName, isMarked: isMarked, id: d, isDeleted: false})
+      }).then(function (response) {
+        if(response){
+            callback("", d)
+        }else{
+            callback("Something went wrong","")
+        }
+    })
+}
+
+
+function todoDone(id){
+    fetch("/done?id=" + id)
+    .then(function(response){
+        if(response.status != 200){
+            throw new Error("Error while fetching")
+        }
+        return;
+    })
+    .then(function(){
+        let text = document.getElementById(id+"t")
+        if(text.style.textDecoration === "line-through"){
+            text.style.textDecoration = ""
+        }else{
+            text.style.textDecoration = "line-through"
+        }
+    })
+    .catch(function(error){
+        alert(error)
+
+    })
+}
+
+
+function todoEdit(id){
+    editId = id
+    addTodoBtn.textContent = "save"
+    let todoData = document.getElementById(id+"t")
+    todoTextBox.value = todoData.innerText
+}
+
+function updateTodo(text, id, userName){
+    fetch("/update?id=" + id + "&text=" + text + "&name=" + userName)
+    .then(function(response){
+        if(response.status != 200){
+            throw new Error("Error while fetching")
+        }
+        return;
+    }).then(function(){
+        let text = document.getElementById(id+"t")
+        addTodoBtn.textContent = "Add"
+        text.innerText = todoTextBox.value
+        todoTextBox.value =""
+        
+    })
+    .catch(function(error){
+        alert(error)
+    })
+}
+
+
+function todoDelete(id){
+    if(addTodoBtn.textContent != "Add"){
+        alert("Please save the todo before deleting")
+        return
+    }
+        
+    let text = document.getElementById(id+"t")
+    let parent = text.parentNode
+    parent.remove();
+    fetch("/delete?id=" + id)
+    .then(function(response){
+        if(response.status !=200){
+            throw new Error("Error while fetching")
+        }
+        return;
+    })
+    .then(function(){
+       return
+    })
+    .catch(function(error){
+        alert(error)
+
+    })
 }
