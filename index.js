@@ -1,4 +1,3 @@
-const fs = require('fs');
 const express = require('express');
 const getTodos = require('./utils/getTodos.js')
 const saveTodo = require('./utils/saveTodo.js')
