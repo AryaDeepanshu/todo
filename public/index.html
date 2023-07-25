@@ -1,32 +1,61 @@
+<!-- FILEPATH: /home/deepanshuarya/Downloads/todo/public/index.html -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo</title>
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
+    <title>Todo App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-+oN9w/IVwqQVJYw4lT1pJL1y9r6c1H+4wJZv6j7v8L4Q6Bz6v7kS8c+Zl3pE6GvJ7wVc2XVQdQx0Oy9S9C3JjA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
 <body>
-    <div class="app">
-        <h1>Taskly</h1>
-        
-        <div class="pane">
-            <div id="leftPane">
-                <p id="todoHeading">Tasks:</p>
-                <ul id="todoList">
-                    
-                </ul>
+    <div class="container">
+        <header class="header">
+            <div class="logo">Todo App</div>
+            <nav class="nav">
+                <a href="/login">Login</a>
+                <a href="/signup">Signup</a>
+            </nav>
+        </header>
+        <section class="hero">
+            <div class="hero-text">
+                <h1>Get organized with Todo App</h1>
+                <p>Never forget a task again. With Todo App, you can easily manage all your tasks in one place.</p>
+                <div class="cta">
+                    <div class="cta-text">Get started today</div>
+                    <button class="cta-btn">Sign up</button>
+                </div>
             </div>
-            <div id="rightPane">
-                <textarea type="text" id="addNewTodoText" placeholder="Add new todo"></textarea>
-                <button id="add-btn" hidden>Add</button>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1521747116042-5a810fda9664" alt="Todo App">
             </div>
-        </div>
-       
+        </section>
+        <section class="features">
+            <div class="feature">
+                <div class="feature-icon"><i class="fas fa-list"></i></div>
+                <div class="feature-title">Create tasks</div>
+                <div class="feature-text">Easily create new tasks and assign them to different categories.</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon"><i class="fas fa-check"></i></div>
+                <div class="feature-title">Mark as complete</div>
+                <div class="feature-text">Mark tasks as complete when you're done with them.</div>
+            </div>
+            <div class="feature">
+                <div class="feature-icon"><i class="fas fa-sync"></i></div>
+                <div class="feature-title">Sync across devices</div>
+                <div class="feature-text">Sync your tasks across all your devices so you never miss a beat.</div>
+            </div>
+        </section>
+        <footer class="footer">
+            <div class="footer-text">Todo App &copy; 2021</div>
+            <div class="footer-social">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+        </footer>
     </div>
 </body>
-<script src="js/todo.js"></script>
 </html>

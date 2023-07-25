@@ -1,4 +1,6 @@
-const userName = prompt("Enter your Name: ");
+const url = window.location.search;
+const urlParams = new URLSearchParams(url);
+const userName = urlParams.get('name');
 const addTodoBtn = document.getElementById("add-btn")
 const todoTextBox = document.getElementById("addNewTodoText")
 let editId =''
