@@ -8,11 +8,10 @@ const deleteTodos = require('./utils/todo/deleteTodos.js')
 const loginAUthentication = require('./utils/authentication/loginAuthentication.js')
 const signUp = require('./utils/authentication/signUp.js')
 const app = express();
-const port = 5000;
+const port = 8080;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(__dirname + "/public/"))
 app.use(session({
     secret: 'youwillnotseethisindeployment',
     resave: true,
@@ -34,12 +33,15 @@ app.get('/todo', (req, res) => {
 
 
 app.get('/css/style.css', (req,res) =>{
-    res.sendFile(__dirname + 'public/css/style.css')
+    res.sendFile(__dirname + '/public/css/style.css')
 })
 
+app.get('/css/index.css', (req,res) =>{
+    res.sendFile(__dirname + '/public/css/index.css')
+})
 
 app.get('/js/todo.js', (req, res) => {
-    res.sendFile(__dirname + "public/js/todo.js")
+    res.sendFile(__dirname + "/public/js/todo.js")
 })
 
 
@@ -168,7 +170,7 @@ app.post('/login', (req, res) => {
         }else{
             req.session.username = username
             req.session.isLoggedIn = true
-            res.status(200).redirect('/main.html?name='+username)
+            res.status(200).redirect('/todo?name='+username)
         }
     })
 })

@@ -139,7 +139,7 @@ textarea:focus,input:focus {
 
 @media only screen and (max-width: 1000px) {
     .pane{
-        flex-direction: column; 
+        flex-direction: column-reverse; 
     }
 
     #leftPane{
@@ -155,6 +155,7 @@ textarea:focus,input:focus {
     #todoHeading{
         position: relative;
         margin: 0px;
+        align-self: center;
     }
     .app{
         margin: 0px;
@@ -169,5 +170,8 @@ textarea:focus,input:focus {
     }
     span{
         text-align: center;
-    }  
+    }
+    #todoHeading{
+        align-self: center;
+    } 
 }

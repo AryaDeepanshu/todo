@@ -1,7 +1,7 @@
 const fs = require('fs')
 
 function signUp(username, password, email, callback){
-    fs.readFile('users.json', "utf-8",  (error, data) =>{
+    fs.readFile('users.data', "utf-8",  (error, data) =>{
         users = JSON.parse(data)
         const filteredUser = users.filter(function(user){
             return user.email === email
@@ -11,7 +11,7 @@ function signUp(username, password, email, callback){
             return
         }
         users.push({username: username, password: password, email: email})
-        fs.writeFile('users.json', JSON.stringify(users), (error) =>{
+        fs.writeFile('users.data', JSON.stringify(users), (error) =>{
             if(error){
                 callback(error)
                 return
