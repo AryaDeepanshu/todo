@@ -11,7 +11,14 @@ const app = express();
 const port = 8080;
 
 app.use(express.json());
+app.set("view engine", "ejs");
+app.set("views", __dirname + "/public");
 app.use(express.urlencoded({ extended: true }));
+app.use(function(req, res, next) {
+    if (!req.user)
+        res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+    next();
+})
 app.use(session({
     secret: 'youwillnotseethisindeployment',
     resave: true,
@@ -20,16 +27,10 @@ app.use(session({
 
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/index.html')
+    res.render('index', {details: req.session.username})
 })
 
-app.get('/todo', (req, res) => {
-    if (!req.session.isLoggedIn){
-        res.redirect('/login')
-        return
-    }
-    res.sendFile(__dirname + '/public/main.html')
-})
+
 
 
 app.get('/css/style.css', (req,res) =>{
@@ -45,7 +46,7 @@ app.get('/js/todo.js', (req, res) => {
 })
 
 
-app.get('/todos', function(req, res){
+app.get('/todo', function(req, res){
     if (!req.session.isLoggedIn){
         res.redirect('/login')
         return
@@ -57,7 +58,7 @@ app.get('/todos', function(req, res){
             res.json({ error: error })
         }else{
             res.status(200)
-            res.json(todos)
+            res.render('main', {todos: todos})
         }
     })
 })
@@ -137,7 +138,7 @@ app.get('/login', (req, res) => {
         res.redirect('/todo')
         return
     }
-    res.sendFile(__dirname + '/public/login.html')
+    res.render('login', {error: ''})
 })
 
 app.get('/logout', (req, res) => {
@@ -145,7 +146,7 @@ app.get('/logout', (req, res) => {
         if (err) {
             console.error(err);
         } else {
-            res.redirect('/login')
+            res.render('login', {error: ''})
         }
     });
     
@@ -156,7 +157,7 @@ app.get('/signup', (req, res) => {
         res.redirect('/todo')
         return
     }
-    res.sendFile(__dirname + '/public/signup.html')
+    res.render('signup', {error: ''})
 })
 
 app.post('/login', (req, res) => {
@@ -166,7 +167,7 @@ app.post('/login', (req, res) => {
     loginAUthentication(username, password, (error)=>{
         if(error){
             console.log(error)
-            res.redirect('/login?error=wrong+credentials')
+            res.render('login', {error: "Wrong credentials"})
         }else{
             req.session.username = username
             req.session.isLoggedIn = true
@@ -181,9 +182,9 @@ app.post('/signup', (req, res) => {
     let email = req.body.email
     signUp(username, password, email, (error)=>{
         if(error){
-            res.redirect('/signup?error=email+already+exists')
+            res.render('signup', {error: error})
         }else{
-            res.status(200).redirect('/login')
+            res.status(200).render('login', {error: ''})
         }
     })
 })

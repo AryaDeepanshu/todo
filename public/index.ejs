@@ -14,18 +14,31 @@
         <header class="header">
             <div class="logo">Todo App</div>
             <nav class="nav">
-                <a href="/login">Login</a>
-                <a href="/signup">Signup</a>
+                <% if(details){ %> 
+                    <a href="/logout">Logout</a>
+                    <% }else{ %>
+                        <a href="/login">Login</a>
+                        <a href="/signup">Signup</a>
+                    <% } %>
             </nav>
         </header>
         <section class="hero">
             <div class="hero-text">
-                <h1>Get organized with Todo App</h1>
-                <p>Never forget a task again. With Todo App, you can easily manage all your tasks in one place.</p>
-                <div class="cta">
-                    <div class="cta-text">Get started today</div>
-                    <button class="cta-btn">Sign up</button>
-                </div>
+                <% if(details){%>
+                    <h1>Welcome <%= details %></h1>
+                    <p>Never forget a task again. With Todo App, you can easily manage all your tasks in one place.</p>
+                    <div class="cta">
+                        <div class="cta-text">Get Started</div>
+                        <a href="/todo"><button class="cta-btn">My Todos</button></a>
+                    </div>
+                    <% }else{ %>
+                        <h1>Get organized with Todo App</h1>
+                        <p>Never forget a task again. With Todo App, you can easily manage all your tasks in one place.</p>
+                    <div class="cta">
+                        <div class="cta-text">Get started today</div>
+                        <a href="/signup"><button class="cta-btn">Sign up</button></a>
+                    </div>
+                    <% } %>
             </div>
             <div class="hero-image">
                 <img src="https://images.unsplash.com/photo-1521747116042-5a810fda9664" alt="Todo App">
@@ -57,5 +70,6 @@
             </div>
         </footer>
     </div>
+    
 </body>
 </html>

@@ -49,6 +49,13 @@
             .login-box input[type="submit"]:hover {
                 background-color: #45a049;
             }
+
+            .error {
+                text-align: center;
+                color: red;
+                font-size: 14px;
+                margin-top: 10px;
+            }
             
             @media screen and (max-width: 600px) {
                 .login-box {
@@ -60,6 +67,9 @@
     <body>
         <div class="login-box">
             <h2>Login</h2>
+            <% if(error){ %>
+                <p class="error"><%= error %></p>
+            <% } %>
             <form method="POST" action="/login">
                 <label for="username">Username</label>
                 <input type="text" id="usernam" name="username" placeholder="Enter your username">

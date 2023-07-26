@@ -7,7 +7,7 @@ function signUp(username, password, email, callback){
             return user.email === email
         })
         if(filteredUser.length != 0){
-            callback("Email already exists")
+            callback("Account already exists")
             return
         }
         users.push({username: username, password: password, email: email})

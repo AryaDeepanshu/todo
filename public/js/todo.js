@@ -6,9 +6,6 @@ const todoTextBox = document.getElementById("addNewTodoText")
 let editId =''
 
 
-getTodos()
-
-
 todoTextBox.addEventListener('keydown', function (e) {
 
     if (e.key === "Enter" && !e.shiftKey) {
@@ -55,24 +52,6 @@ function btnClk(id){
     }
 }
 
-
-function getTodos(){
-    fetch("/todos?name=" + userName)
-    .then(function(response){
-        if(response.status != 200){
-            throw new Error("Error while fetching")
-        }
-        return response.json();
-    })
-    .then(function(todos){
-        addTodoToDOM(todos)
-    })
-    .catch(function(error){
-        alert(error)
-
-    })
-}
-
 function addTodoToDOM(todos){
     if(!todos){
         return
@@ -88,7 +67,7 @@ function addTodoToDOM(todos){
         <input class="done-btn" type="checkbox" ismarked="${status}" id="${todoid}c" onclick="btnClk(this.id)" ${isMarked?"checked":""}>
         <button class="edit-btn" id="${todoid}e" onclick="btnClk(this.id)">🖉</button>
         <buttom class="delete-btn" id="${todoid}d" onclick="btnClk(this.id)">✖</buttom></li>`
-       todoList.insertAdjacentHTML('beforeend', component) 
+        todoList.insertAdjacentHTML('beforeend', component) 
     });
     
 }
@@ -177,7 +156,7 @@ function todoDelete(id){
         return;
     })
     .then(function(){
-       return
+        return
     })
     .catch(function(error){
         alert(error)
