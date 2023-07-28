@@ -47,7 +47,7 @@ app.get('/todo', function(req, res){
             res.json({ error: error })
         }else{
             res.status(200)
-            res.render('main', {todos: todos, details: req.session.username})
+            res.render('app.ejs', {todos: todos, details: req.session.username})
         }
     })
 })
