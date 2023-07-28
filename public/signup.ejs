@@ -1,60 +1,14 @@
-<!-- FILEPATH: /home/deepanshuarya/Downloads/todo/public/signup.ejs -->
-
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
         <title>Sign Up</title>
-        <style>
-            /* Add styles for the page here */
-            body {
-                font-family: Arial, sans-serif;
-                background-color: #f2f2f2;
-            }
-            .container {
-                background-color: #fff;
-                border-radius: 10px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                margin: 50px auto;
-                max-width: 500px;
-                padding: 30px;
-                text-align: center;
-            }
-            h1 {
-                color: #333;
-                font-size: 24px;
-                margin-bottom: 30px;
-            }
-            input[type="text"], input[type="email"], input[type="password"] {
-                border: none;
-                border-radius: 5px;
-                box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-                margin-bottom: 20px;
-                padding: 10px;
-                width: 100%;
-            }
-            input[type="submit"] {
-                background-color: #45a049;
-                border: none;
-                border-radius: 5px;
-                color: #fff;
-                cursor: pointer;
-                font-size: 16px;
-                padding: 10px;
-                width: 100%;
-            }
-            input[type="submit"]:hover {
-                background-color: #57bb5c;
-            }
-            .error {
-                color: red;
-                font-size: 14px;
-                margin-top: 10px;
-            }
-        </style>
+        <link rel="stylesheet" type="text/css" href="css/sign.css">
+        <link rel="stylesheet" type="text/css" href="css/header.css">
     </head>
     <body>
-        <div class="container">
+        <%- include('header.ejs') %>
+        <div class="container-body">
             <h1>Sign Up</h1>
             <form action="/signup" method="POST">
                 <input type="text" name="name" placeholder="Username" required>

@@ -30,20 +30,8 @@ app.get('/', (req, res) => {
     res.render('index', {details: req.session.username})
 })
 
-
-
-
-app.get('/css/style.css', (req,res) =>{
-    res.sendFile(__dirname + '/public/css/style.css')
-})
-
-app.get('/css/index.css', (req,res) =>{
-    res.sendFile(__dirname + '/public/css/index.css')
-})
-
-app.get('/js/todo.js', (req, res) => {
-    res.sendFile(__dirname + "/public/js/todo.js")
-})
+// define static file
+app.use(express.static('public/assets/'))
 
 
 app.get('/todo', function(req, res){
@@ -52,13 +40,14 @@ app.get('/todo', function(req, res){
         return
     }
     let name = req.session.username
-    getTodos(name, function(error, todos){
+    let email = req.session.email
+    getTodos(name, email, function(error, todos){
         if(error){
             res.status(500)
             res.json({ error: error })
         }else{
             res.status(200)
-            res.render('main', {todos: todos})
+            res.render('main', {todos: todos, details: req.session.username})
         }
     })
 })
@@ -70,6 +59,8 @@ app.post('/todo', (req, res) => {
         return
     }
     const todo = req.body
+    const email = req.session.email
+    todo.email = email
     saveTodo(todo, (error) => {
         if(error){
             res.status(500)
@@ -138,7 +129,7 @@ app.get('/login', (req, res) => {
         res.redirect('/todo')
         return
     }
-    res.render('login', {error: ''})
+    res.render('login', {error: '', details: req.session.username})
 })
 
 app.get('/logout', (req, res) => {
@@ -146,7 +137,7 @@ app.get('/logout', (req, res) => {
         if (err) {
             console.error(err);
         } else {
-            res.render('login', {error: ''})
+            res.render('login', {error: '', details: null})
         }
     });
     
@@ -157,21 +148,20 @@ app.get('/signup', (req, res) => {
         res.redirect('/todo')
         return
     }
-    res.render('signup', {error: ''})
+    res.render('signup', {error: '', details: req.session.username})
 })
 
 app.post('/login', (req, res) => {
-
-    let username = req.body.username
+    let email = req.body.email
     let password = req.body.password
-    loginAUthentication(username, password, (error)=>{
+    loginAUthentication(email, password, (error, user)=>{
         if(error){
-            console.log(error)
-            res.render('login', {error: "Wrong credentials"})
+            res.render('login', {error: "Wrong credentials", details: req.session.username})
         }else{
-            req.session.username = username
+            req.session.username = user.username
             req.session.isLoggedIn = true
-            res.status(200).redirect('/todo?name='+username)
+            req.session.email = user.email
+            res.status(200).redirect('/todo?name='+req.session.username)
         }
     })
 })
@@ -182,9 +172,9 @@ app.post('/signup', (req, res) => {
     let email = req.body.email
     signUp(username, password, email, (error)=>{
         if(error){
-            res.render('signup', {error: error})
+            res.render('signup', {error: error, details: null})
         }else{
-            res.status(200).render('login', {error: ''})
+            res.status(200).render('login', {error: 'login with account you created', details: null})
         }
     })
 })

@@ -79,7 +79,7 @@ function saveTodo (todo, isMarked, callback){
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({text: todo, createdBy : userName, isMarked: isMarked, id: d, isDeleted: false})
-      }).then(function (response) {
+    }).then(function (response) {
         if(response){
             callback("", d)
         }else{

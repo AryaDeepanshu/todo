@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/header.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
 </head>
 <body>
+    <%- include('header.ejs') %>
     <div class="app">
-        <h1>Taskly</h1>
-        
         <div class="pane">
             <div id="leftPane">
                 <p id="todoHeading">Tasks:</p>
@@ -28,12 +28,13 @@
                         let status = (todo.isMarked)? "text-decoration: line-through":"" 
                         %>
                         
-                        <li><span style="<%= status %>" id="<%= todoid + 't'%>"><%= todotext %> </span>
+                        <li>
+                            <span style="<%= status %>" id="<%= todoid + 't'%>"><%= todotext %> </span>
                             <input class="done-btn" type="checkbox" ismarked="<%= status %>" id="<%= todoid + 'c'%>" onclick="btnClk(this.id)" <%= isMarked?"checked":"" %>>
-                            <button class="edit-btn" id="${todoid}e" onclick="btnClk(this.id)">🖉</button>
-                            <buttom class="delete-btn" id="${todoid}d" onclick="btnClk(this.id)">✖</buttom>
+                            <button class="edit-btn" id="<%= todoid + 'e'%>" onclick="btnClk(this.id)">🖉</button>
+                            <buttom class="delete-btn" id="<%= todoid + 'd'%>" onclick="btnClk(this.id)">✖</buttom>
                         </li>
-                    <% }); %>
+                        <% }); %>
                     </ul>
                 <% } %>
             </div>
@@ -42,7 +43,6 @@
                 <button id="add-btn" hidden>Add</button>
             </div>
         </div>
-        <form action="/logout"><button type="submit">Logout</button></form>
     </div>
 </body>
 <script src="js/todo.js"></script>

@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-function getTodos(name,callback){
+function getTodos(name, email, callback){
     let filteredTodos = []
     fs.readFile("todo.todo", "utf-8", (error, data) =>{
         if(error){
@@ -14,7 +14,7 @@ function getTodos(name,callback){
                     data = data.substring(0, data.length - 1);
                 todoString = '['+ data +']'
                 let todos = JSON.parse(todoString);
-                filteredTodos = todos.filter(todo  => todo.createdBy === name );
+                filteredTodos = todos.filter(todo  => todo.createdBy === name & todo.email === email );
             }catch(error){
                 callback(error, [])
             }

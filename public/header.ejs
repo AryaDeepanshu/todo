@@ -1,0 +1,14 @@
+<div class="container">
+    <header class="header">
+            <div class="logo">Taskly</div>
+            <nav class="nav">
+                <% if(details){ %> 
+                    <p>Welcome <%= details %></p>
+                    <a href="/logout">Logout</a>
+                    <% }else{ %>
+                        <a href="/login">Login</a>
+                        <a href="/signup">Signup</a>
+                    <% } %>
+            </nav>
+    </header>
+</div>

@@ -23,9 +23,8 @@ h1 {
     flex-direction: column;
     justify-content:center;
     background-color: white;
-    height: 96vh;
+    height: 100vh;
     border-radius: 1em;
-    margin: 19px;
     align-items: center;
 }
 .pane{

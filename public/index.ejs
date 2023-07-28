@@ -1,5 +1,3 @@
-<!-- FILEPATH: /home/deepanshuarya/Downloads/todo/public/index.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,20 +6,11 @@
     <title>Todo App</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-+oN9w/IVwqQVJYw4lT1pJL1y9r6c1H+4wJZv6j7v8L4Q6Bz6v7kS8c+Zl3pE6GvJ7wVc2XVQdQx0Oy9S9C3JjA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/header.css">
 </head>
 <body>
     <div class="container">
-        <header class="header">
-            <div class="logo">Todo App</div>
-            <nav class="nav">
-                <% if(details){ %> 
-                    <a href="/logout">Logout</a>
-                    <% }else{ %>
-                        <a href="/login">Login</a>
-                        <a href="/signup">Signup</a>
-                    <% } %>
-            </nav>
-        </header>
+        <%- include('header.ejs') %>
         <section class="hero">
             <div class="hero-text">
                 <% if(details){%>
