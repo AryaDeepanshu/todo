@@ -14,6 +14,7 @@ function loginAUthentication(email, password, callback){
             return
         }
         callback(null, {username : filteredUser[0].username, email : filteredUser[0].email})
+        
     })
 }
 

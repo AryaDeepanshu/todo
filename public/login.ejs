@@ -10,8 +10,8 @@
         <%- include('partials/header.ejs') %>
         <div class="container-body">
             <h1>Login</h1>
-            <% if(error){ %>
-                <p class="error"><%= error %></p>
+            <% if(message){ %>
+                <p class="error"><%= message %></p>
             <% } %>
             <form method="POST" action="/login">
                 <label for="username">email</label>

@@ -17,6 +17,7 @@
                         
                         <li>
                             <span style="<%= status %>" id="<%= todoid + 't'%>"><%= todotext %> </span>
+                            <img src="<%= todo.img%>" alt="dp" width="32px" height="32px">
                             <input class="done-btn" type="checkbox" ismarked="<%= status %>" id="<%= todoid + 'c'%>" onclick="btnClk(this.id)" <%= isMarked?"checked":"" %>>
                             <button class="edit-btn" id="<%= todoid + 'e'%>" onclick="btnClk(this.id)">🖉</button>
                             <buttom class="delete-btn" id="<%= todoid + 'd'%>" onclick="btnClk(this.id)">✖</buttom>
@@ -26,8 +27,15 @@
                 <% } %>
             </div>
             <div id="rightPane">
-                <textarea type="text" id="addNewTodoText" placeholder="Add new todo"></textarea>
-                <button id="add-btn" hidden>Add</button>
+                <form method="post" enctype="multipart/form-data">
+                    <input style="display: none;" type="text" name="id1" id="id">
+                    <textarea type="text" id="addNewTodoText" name="todoText" placeholder="Add new todo" required></textarea>
+                    <input  type="file" name="dp">
+                    <button formaction="dp" id="adbtn" type="submit" >Add</button>
+                    <button formaction="/update" id="upbtn" type="submit" >Update</button>
+                    
+                </form>
+                <button type="submit" id="add-btn" hidden>Add</button>
             </div>
         </div>
     </div>

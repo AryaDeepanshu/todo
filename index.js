@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session')
+const multer  = require('multer')
 const getTodos = require('./utils/todo/getTodos.js')
 const saveTodo = require('./utils/todo/saveTodo.js')
 const todoDone = require('./utils/todo/todoDone.js')
@@ -7,6 +8,7 @@ const todoUpdate = require('./utils/todo/todoUpdate.js')
 const deleteTodos = require('./utils/todo/deleteTodos.js')
 const loginAUthentication = require('./utils/authentication/loginAuthentication.js')
 const signUp = require('./utils/authentication/signUp.js')
+const upload = multer({ dest: 'public/assets/uploads/' })
 const app = express();
 const port = 8080;
 
@@ -14,6 +16,7 @@ app.use(express.json());
 app.set("view engine", "ejs");
 app.set("views", __dirname + "/public");
 app.use(express.urlencoded({ extended: true }));
+
 app.use(function(req, res, next) {
     if (!req.user)
         res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
@@ -32,6 +35,7 @@ app.get('/', (req, res) => {
 
 // define static file
 app.use(express.static('public/assets/'))
+app.use(express.static('public/assets/uploads/'))
 
 
 app.get('/todo', function(req, res){
@@ -52,6 +56,20 @@ app.get('/todo', function(req, res){
     })
 })
 
+app.post('/dp', upload.single('dp'), (req, res) => {
+    if (!req.session.isLoggedIn){
+        res.redirect('/login')
+        return
+    }
+    d = new Date().getTime()
+    todo = {text: req.body.todoText, createdBy : req.session.username, isMarked: false, id: d, isDeleted: false, email: req.session.email, img: req.file.filename}
+    saveTodo(todo, (error) => {
+        if(error){
+            console.log(error)
+        }
+    }) 
+    res.redirect('/todo')
+})
 
 app.post('/todo', (req, res) => {
     if (!req.session.isLoggedIn){
@@ -89,20 +107,22 @@ app.get('/done', function(req, res){
 })
 
 
-app.get('/update', function(req, res){
+app.post('/update', upload.single('dp'), function(req, res){
     if (!req.session.isLoggedIn){
         res.redirect('/login')
         return
     }
-    let id = req.query.id
-    let text = req.query.text
-    let name = req.query.name
-    todoUpdate(id, text, name, function(error){
+    let id = req.body.id1
+    console.log(id)
+    let img = req.file
+    let text = req.body.todoText
+    let name = req.session.username
+    todoUpdate(id, text, name, img, function(error){
         if(error){
             res.status(500)
             res.json({ error: error })
         }else{
-            res.status(200).send()
+            res.redirect('/todo')
         }
     })
 })
@@ -125,11 +145,14 @@ app.get('/delete', function(req, res){
 })
 
 app.get('/login', (req, res) => {
+    message = req.session.message
+    req.session.message = null
     if(req.session.isLoggedIn){
         res.redirect('/todo')
         return
     }
-    res.render('login', {error: '', details: req.session.username})
+    res.render('login', {message: message , details: req.session.username})
+    
 })
 
 app.get('/logout', (req, res) => {
@@ -144,11 +167,13 @@ app.get('/logout', (req, res) => {
 })
 
 app.get('/signup', (req, res) => {
+    message = req.session.message
+    req.session.message = null
     if(req.session.isLoggedIn){
         res.redirect('/todo')
         return
     }
-    res.render('signup', {error: '', details: req.session.username})
+    res.render('signup', {message: message, details: req.session.username})
 })
 
 app.post('/login', (req, res) => {
@@ -156,12 +181,13 @@ app.post('/login', (req, res) => {
     let password = req.body.password
     loginAUthentication(email, password, (error, user)=>{
         if(error){
-            res.render('login', {error: "Wrong credentials", details: req.session.username})
+            req.session.message = error
+            res.redirect('/login')
         }else{
             req.session.username = user.username
             req.session.isLoggedIn = true
             req.session.email = user.email
-            res.status(200).redirect('/todo?name='+req.session.username)
+            res.redirect('/todo?name='+req.session.username)
         }
     })
 })
@@ -172,9 +198,11 @@ app.post('/signup', (req, res) => {
     let email = req.body.email
     signUp(username, password, email, (error)=>{
         if(error){
-            res.render('signup', {error: error, details: null})
+            req.session.message = error
+            res.redirect('/signup')
         }else{
-            res.status(200).render('login', {error: 'login with account you created', details: null})
+            req.session.message = "login with account created"
+            res.redirect('/login')
         }
     })
 })

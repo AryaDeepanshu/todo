@@ -3,16 +3,27 @@ const urlParams = new URLSearchParams(url);
 const userName = urlParams.get('name');
 const addTodoBtn = document.getElementById("add-btn")
 const todoTextBox = document.getElementById("addNewTodoText")
+const adbtn = document.getElementById('adbtn')
+const upbtn = document.getElementById('upbtn')
 let editId =''
 
+ToggleForm(adbtn)
 
 todoTextBox.addEventListener('keydown', function (e) {
 
     if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
-        addTodoBtn.click();
     }
 });
+
+function ToggleForm(btn){
+    btn.style.visibility = "visible"
+    if(btn.textContent === "Add"){
+        upbtn.style.visibility = "hidden"
+    }else{
+        adbtn.style.visibility = "hidden"
+    }
+}
 
 addTodoBtn.addEventListener("click", () => {
     let todoInputText = todoTextBox.value
@@ -48,6 +59,9 @@ function btnClk(id){
 
     if(id.slice(-1) === "e"){
         id = id.substring(0, id.length - 1)
+        ele = document.getElementById("id")
+        ele.value = id
+        ToggleForm(upbtn)
         todoEdit(id)
     }
 }
@@ -117,6 +131,7 @@ function todoEdit(id){
     addTodoBtn.textContent = "save"
     let todoData = document.getElementById(id+"t")
     todoTextBox.value = todoData.innerText
+
 }
 
 function updateTodo(text, id, userName){
@@ -131,7 +146,7 @@ function updateTodo(text, id, userName){
         addTodoBtn.textContent = "Add"
         text.innerText = todoTextBox.value
         todoTextBox.value =""
-        
+        ToggleForm(adbtn)
     })
     .catch(function(error){
         alert(error)
