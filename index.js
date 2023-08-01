@@ -113,7 +113,6 @@ app.post('/update', upload.single('dp'), function(req, res){
         return
     }
     let id = req.body.id1
-    console.log(id)
     let img = req.file
     let text = req.body.todoText
     let name = req.session.username

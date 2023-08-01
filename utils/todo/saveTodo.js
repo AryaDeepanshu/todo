@@ -1,14 +1,27 @@
 const fs = require("fs")
 
 function saveTodo(todo, callback){
-    try{
-        let stream = fs.createWriteStream("todo.todo", {flags: 'a'})
-        stream.write(JSON.stringify(todo) + ",")
-        stream.end()
+    let todos =[]
+    fs.readFile("todo.todo", "utf-8", (error, data) => {
+        if(error){
+            callback(error)
+        }else{
+            try{
+                if(data){
+                    todos = JSON.parse(data)
+                }
+                todos.push(todo)
+                let stream = fs.createWriteStream("todo.todo", {flags: 'w'})
+                stream.write(JSON.stringify(todos))
+                stream.end()
+                callback(null)
+                
+            }catch(error){
+                callback(error)
+            }
+        }
         callback(null)
-    }catch(error){
-        callback(error)
-    }
+    })
 }
 
 module.exports = saveTodo

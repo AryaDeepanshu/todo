@@ -7,14 +7,11 @@ function getTodos(name, email, callback){
             callback(error)
         }else{
             if(data.length === 0){
-                data = ""
+                data = "[]"
             }
             try{
-                if(data[data.length - 1] === ",")
-                    data = data.substring(0, data.length - 1);
-                todoString = '['+ data +']'
-                let todos = JSON.parse(todoString);
-                filteredTodos = todos.filter(todo  => todo.createdBy === name & todo.email === email );
+                let todos = JSON.parse(data);
+                filteredTodos = todos.filter(todo  => todo.createdBy === name & todo.email === email )
             }catch(error){
                 callback(error, [])
             }
