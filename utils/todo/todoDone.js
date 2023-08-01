@@ -1,10 +1,13 @@
 const fs = require('fs')
 
-function todoDone(id, callback){
+function todoDone(req, res){
+    if (!req.session.isLoggedIn)
+        res.redirect('/login')
+    let id = req.query.id
     replaced = ""
     fs.readFile("todo.todo", "utf-8", (error, data) => {
         if(error){
-            callback(error)
+            res.status(500).json({error: error})
         }else{
             try{
                 let findString =""
@@ -20,14 +23,14 @@ function todoDone(id, callback){
 
                 fs.writeFile('todo.todo', replaced, 'utf-8', function (err) {
                     if(err){
-                        callback(err)
+                        res.status(500).json({error: err})
                     }
                 })
             }catch(error){
-                callback(error)
+                res.status(500).json({error: error})
             }
         }
-        callback(null)
+        res.status(200).send()
     })
 }
 

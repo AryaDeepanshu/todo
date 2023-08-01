@@ -1,11 +1,10 @@
-const url = window.location.search;
-const urlParams = new URLSearchParams(url);
-const userName = urlParams.get('name');
-const addTodoBtn = document.getElementById("add-btn")
 const todoTextBox = document.getElementById("addNewTodoText")
 const adbtn = document.getElementById('adbtn')
 const upbtn = document.getElementById('upbtn')
+const filePicker = document.getElementById('filepick')
 let editId =''
+
+getTodos()
 
 ToggleForm(adbtn)
 
@@ -13,6 +12,7 @@ todoTextBox.addEventListener('keydown', function (e) {
 
     if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
+        adbtn.click();
     }
 });
 
@@ -20,31 +20,12 @@ function ToggleForm(btn){
     btn.style.visibility = "visible"
     if(btn.textContent === "Add"){
         upbtn.style.visibility = "hidden"
+        filePicker.setAttribute('required', '');
     }else{
         adbtn.style.visibility = "hidden"
+        filePicker.removeAttribute('required')
     }
 }
-
-addTodoBtn.addEventListener("click", () => {
-    let todoInputText = todoTextBox.value
-    if(todoInputText){
-        if(addTodoBtn.textContent != "save"){
-            saveTodo(todoInputText, false, (error, id) => {
-                if(error){
-                    alert("Error: " + error)
-                }else{
-                    todoTextBox.value = ""
-                    todos = [{text: todoInputText, createdBy : userName, isMarked: false, id: id, isDeleted: false}]
-                    addTodoToDOM(todos)
-                }
-            })
-        }else{
-            updateTodo(todoInputText,editId, userName)
-        }
-    }else{
-        alert("Todo text is empty")
-    }
-})
 
 function btnClk(id){
     if(id.slice(-1) === "d"){
@@ -75,33 +56,18 @@ function addTodoToDOM(todos){
         todotext = todo.text, 
         isMarked = todo.isMarked
         isDeleted  = todo.isDeleted
+        todoImg = todo.img
         let status = (todo.isMarked)? "text-decoration: line-through":""
+
         let component =
         `<li><span style="${status}" id="${todoid}t">${todotext}</span>
+        <img src="${todoImg}" alt="dp" width="32px" height="32px">
         <input class="done-btn" type="checkbox" ismarked="${status}" id="${todoid}c" onclick="btnClk(this.id)" ${isMarked?"checked":""}>
         <button class="edit-btn" id="${todoid}e" onclick="btnClk(this.id)">🖉</button>
         <buttom class="delete-btn" id="${todoid}d" onclick="btnClk(this.id)">✖</buttom></li>`
-        todoList.insertAdjacentHTML('beforeend', component) 
+        todoList.insertAdjacentHTML('beforeend', component)
     });
-    
 }
-
-
-function saveTodo (todo, isMarked, callback){
-    let d = new Date().getTime()
-    fetch('/todo', {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({text: todo, createdBy : userName, isMarked: isMarked, id: d, isDeleted: false})
-    }).then(function (response) {
-        if(response){
-            callback("", d)
-        }else{
-            callback("Something went wrong","")
-        }
-    })
-}
-
 
 function todoDone(id){
     fetch("/done?id=" + id)
@@ -121,21 +87,19 @@ function todoDone(id){
     })
     .catch(function(error){
         alert(error)
-
     })
 }
 
-
 function todoEdit(id){
     editId = id
-    addTodoBtn.textContent = "save"
+    adbtn.visibility = "hidden"
     let todoData = document.getElementById(id+"t")
     todoTextBox.value = todoData.innerText
 
 }
 
-function updateTodo(text, id, userName){
-    fetch("/update?id=" + id + "&text=" + text + "&name=" + userName)
+function updateTodo(text, id){
+    fetch("/update?id=" + id + "&text=" + text)
     .then(function(response){
         if(response.status != 200){
             throw new Error("Error while fetching")
@@ -153,9 +117,8 @@ function updateTodo(text, id, userName){
     })
 }
 
-
 function todoDelete(id){
-    if(addTodoBtn.textContent != "Add"){
+    if(adbtn.visibility === "hidden"){
         alert("Please save the todo before deleting")
         return
     }
@@ -175,6 +138,12 @@ function todoDelete(id){
     })
     .catch(function(error){
         alert(error)
-
     })
+}
+
+function getTodos(){
+    fetch("/todos")
+    .then(res => res.json())
+    .then(todos => {addTodoToDOM(todos)})
+    .catch(error => alert(error))
 }

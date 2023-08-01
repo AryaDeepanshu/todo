@@ -119,7 +119,8 @@ textarea:focus,input:focus {
     outline: none;
 }
 
-#add-btn{
+#adbtn,#upbtn{
+    cursor: pointer;
     background-color: green;
     color: white;
     border: 0.5px solid green;
@@ -128,12 +129,41 @@ textarea:focus,input:focus {
     padding: 1%;
 }
 
+
+
+
 #todoHeading{
     position: absolute;
     margin: -9px 0px 0px 0px;
     font-size: 50px;
     background-color: rgb(210, 209, 209);
     height: 65px
+}
+
+label.label input[type="file"] {
+    position: absolute;
+    top: -1000px;
+}
+.label {
+    cursor: pointer;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    padding: 5px 15px;
+    margin: 5px;
+    background: #dddddd;
+    display: inline-block;
+}
+.label:hover {
+    background: green;
+}
+.label:active {
+    background: #9fa1a0;
+}
+.label:invalid+span {
+    color: #000000;
+}
+.label:valid+span {
+    color: #ffffff;
 }
 
 @media only screen and (max-width: 1000px) {

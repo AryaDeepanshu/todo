@@ -1,10 +1,13 @@
 const fs = require('fs');
 
-function deleteTodos(id,callback){
+function deleteTodos(req, res){
+    if(!req.sessionisLoggedIn)
+        res.redirect('/login')
+    let id = req.query.id
     let replaced = ""
     fs.readFile("todo.todo", "utf-8", (error, data) => {
         if(error){
-            callback(error)
+            res.status(500).json({error: error})
         }else{
             try{
                 todos = JSON.parse(data)
@@ -13,16 +16,15 @@ function deleteTodos(id,callback){
                 todos = todos.filter(todo  => todo.id != id )
                 fs.writeFile('todo.todo', JSON.stringify(todos), 'utf-8', function (err) {
                     if(err){
-                        callback(err)
+                        res.status(500).json({error: err})
                     }
                 })
             }catch(error){
-                callback(error)
+                res.status(500).json({error: error})
             }
         }
-        callback(null)
+        res.status(200).send()
     })
-    
 }
 
 module.exports = deleteTodos

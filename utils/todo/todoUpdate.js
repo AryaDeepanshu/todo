@@ -1,11 +1,16 @@
-const { fileLoader } = require('ejs')
 const fs = require('fs')
 
-function todoUpdate(id, text, name, img, callback){
+function todoUpdate(req, res){
+    if (!req.session.isLoggedIn)
+        res.redirect('/login')
+    let id = req.body.id1
+    let img = req.file
+    let text = req.body.todoText
+    let name = req.session.username
     let replaced = ""
     fs.readFile("todo.todo", "utf-8", (error, data) => { 
         if(error){
-            callback(error)
+            res.status(500).json({error: error})
         }else{
             try{
                 todos = JSON.parse(data)
@@ -16,14 +21,14 @@ function todoUpdate(id, text, name, img, callback){
                 replaced = data.replace(JSON.stringify(filteredTodos[0]), JSON.stringify(newTodo))
                 fs.writeFile('todo.todo', replaced, 'utf-8', function (err) {
                     if(err){
-                        callback(err)
+                        res.status(500).json({error: err})
                     }
                 })
             }catch(error){
-                callback(error)
+                res.status(500).json({error: error})
             }
         }
-        callback(null)
+        res.redirect('/todo')
     })
 }
 

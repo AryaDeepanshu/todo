@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App</title>
+    <% if(details){ %>
+        <title>Todo | <%= details %></title>
+    <% }else{ %>
+        <title>Todo</title>
+    <% } %>
+    <link rel="icon" type="image/x-icon" href="favicon/favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-+oN9w/IVwqQVJYw4lT1pJL1y9r6c1H+4wJZv6j7v8L4Q6Bz6v7kS8c+Zl3pE6GvJ7wVc2XVQdQx0Oy9S9C3JjA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="css/header.css">
