@@ -40,8 +40,9 @@ function btnClk(id){
 
     if(id.slice(-1) === "e"){
         id = id.substring(0, id.length - 1)
+        imgUrl = document.getElementById(id+"i").src
         ele = document.getElementById("id")
-        ele.value = id
+        ele.value = id + "~" + imgUrl
         ToggleForm(upbtn)
         todoEdit(id)
     }
@@ -52,8 +53,8 @@ function addTodoToDOM(todos){
         return
     }
     todos.forEach(todo => {
-        todoid = todo.id,
-        todotext = todo.text, 
+        todoid = todo._id
+        todotext = todo.text
         isMarked = todo.isMarked
         isDeleted  = todo.isDeleted
         todoImg = todo.img
@@ -61,7 +62,7 @@ function addTodoToDOM(todos){
 
         let component =
         `<li><span style="${status}" id="${todoid}t">${todotext}</span>
-        <img src="${todoImg}" alt="dp" width="32px" height="32px">
+        <img id="${todoid}i" src="${todoImg}" alt="dp" width="32px" height="32px">
         <input class="done-btn" type="checkbox" ismarked="${status}" id="${todoid}c" onclick="btnClk(this.id)" ${isMarked?"checked":""}>
         <button class="edit-btn" id="${todoid}e" onclick="btnClk(this.id)">🖉</button>
         <buttom class="delete-btn" id="${todoid}d" onclick="btnClk(this.id)">✖</buttom></li>`
@@ -129,7 +130,7 @@ function todoDelete(id){
     fetch("/delete?id=" + id)
     .then(function(response){
         if(response.status !=200){
-            throw new Error("Error while fetching")
+            throw new Error("Error while fetching1")
         }
         return;
     })

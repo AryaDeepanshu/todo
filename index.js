@@ -1,14 +1,16 @@
-const express = require('express')
-const session = require('express-session')
 const multer  = require('multer')
+const express = require('express')
+const mongoose = require('mongoose');
+const db = require('./utils/db/db.js')
+const session = require('express-session')
 const getTodos = require('./utils/todo/getTodos.js')
 const saveTodo = require('./utils/todo/saveTodo.js')
 const todoDone = require('./utils/todo/todoDone.js')
 const todoUpdate = require('./utils/todo/todoUpdate.js')
-const deleteTodos = require('./utils/todo/deleteTodos.js')
-const loginAUthentication = require('./utils/authentication/loginAuthentication.js')
-const signUp = require('./utils/authentication/signUp.js')
 const logout = require('./utils/authentication/logout.js')
+const deleteTodos = require('./utils/todo/deleteTodos.js')
+const signUp = require('./utils/authentication/signUp.js')
+const loginAUthentication = require('./utils/authentication/loginAuthentication.js')
 
 const port = 8080;
 const app = express()
@@ -74,6 +76,8 @@ app.post('/signup', signUp)
 app.post('/update', todoUpdate)
 app.post('/login', loginAUthentication)
 
-app.listen(port,()=>{
-    console.log("Server is running on port 8080")
+db.init().then(() => {
+    app.listen(port,()=>{
+        console.log("Server is running on port 8080")
+    })
 })

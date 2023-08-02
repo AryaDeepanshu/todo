@@ -1,27 +1,22 @@
-const fs = require('fs')
+const UserModel = require('../../models/User.js')
 
 function loginAUthentication(req, res){
     let email = req.body.email
     let password = req.body.password
-    fs.readFile('users.data', "utf-8",  (error, data) =>{
-        if(error){
-            req.session.message = error
-            res.status(500).redirect('/login')
-            return
-        }
-        const users = JSON.parse(data)
-        const filteredUser = users.filter(function(user){
-            return user.email === email && user.password === password 
-        })
-        if(filteredUser.length != 1){
+    UserModel.findOne({email: email, password: password}).then((user)=>{
+        if(!user){
             req.session.message = "Wrong credentials"
             res.status(200).redirect('/login')
             return
         }
-        req.session.username = filteredUser[0].username
-        req.session.email = filteredUser[0].email
+        req.session.username = user.username
+        req.session.email = user.email
         req.session.isLoggedIn = true
         res.redirect('/todo?name='+req.session.username)
+    }).catch((error)=>{
+        req.session.message = error.message
+        res.status(500).redirect('/login')
+        return
     })
 }
 

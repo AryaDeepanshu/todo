@@ -1,34 +1,17 @@
-const fs = require('fs')
+const TodoModel = require('../../models/Todo.js')
 
 function todoUpdate(req, res){
     if (!req.session.isLoggedIn)
         res.redirect('/login')
-    let id = req.body.id1
-    let img = req.file
+    let [id, url] = req.body.id1.split("~")
+    let oldImg = url.substring(url.lastIndexOf("/") + 1, url.length)
+    let newImg = req.file
     let text = req.body.todoText
     let name = req.session.username
-    let replaced = ""
-    fs.readFile("todo.todo", "utf-8", (error, data) => { 
-        if(error){
-            res.status(500).json({error: error})
-        }else{
-            try{
-                todos = JSON.parse(data)
-                let filteredTodos = todos.filter(todo  => todo.createdBy === name && todo.id == id )
-                let newTodo = Object.assign({}, filteredTodos[0])
-                newTodo.text = text
-                newTodo.img = (img) ? img.filename : newTodo.img
-                replaced = data.replace(JSON.stringify(filteredTodos[0]), JSON.stringify(newTodo))
-                fs.writeFile('todo.todo', replaced, 'utf-8', function (err) {
-                    if(err){
-                        res.status(500).json({error: err})
-                    }
-                })
-            }catch(error){
-                res.status(500).json({error: error})
-            }
-        }
+    TodoModel.findOneAndUpdate({_id: id}, {text: text, img: (newImg) ? newImg.filename : oldImg}).then(()=>{
         res.redirect('/todo')
+    }).catch((error)=>{
+        res.status(500).json({error: error})
     })
 }
 
