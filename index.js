@@ -79,5 +79,7 @@ app.post('/login', loginAUthentication)
 db.init().then(() => {
     app.listen(port,()=>{
         console.log("Server is running on port 8080")
+        if(process.argv[2])
+            process.exit(1)
     })
 })

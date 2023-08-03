@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npx nodemon index.js",
-    "test": "echo \"no test specified\" "
+    "test": "node index.js true "
   },
   "author": "Deepanshu Arya",
   "license": "ISC",
